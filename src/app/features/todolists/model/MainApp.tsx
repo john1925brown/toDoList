@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/common/hooks/useAppDispatch';
+import { useAppDispatch } from '@/common/hooks';
 import { CreateItemForm } from '@/common/components/CreateItemForm/CreateItemForm';
 import { createTodolistAC } from '@/app/features/todolists/model/todolists-reducer';
 import Container from '@mui/material/Container';

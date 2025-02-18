@@ -1,7 +1,7 @@
 import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import { useAppSelector } from '@/common/hooks/useAppSelector';
+import { useAppSelector } from '@/common/hooks';
 import { getTheme } from '@/common/theme/theme';
 import { selectThemeMode } from '@/app/features/todolists/model/app-selector';
 import { Main } from '@/app/features/todolists/model/MainApp';

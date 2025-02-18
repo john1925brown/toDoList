@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import { EditableSpan } from '@/common/components/EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
-import { useAppDispatch } from '@/common/hooks/useAppDispatch';
+import { useAppDispatch } from '@/common/hooks';
 import { ListItem } from '@mui/material';
 import {
   changeTaskStatusAC,
