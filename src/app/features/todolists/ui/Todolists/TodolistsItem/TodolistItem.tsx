@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/common/hooks/useAppDispatch';
+import { useAppDispatch } from '@/common/hooks';
 import { FilterBtns } from './FilterBtns/FilterBtns';
 import { Tasks } from './Tasks/Tasks';
 import { Todolist } from '@/app/App';

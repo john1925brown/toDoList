@@ -1,6 +1,6 @@
 import { List } from '@mui/material';
 import { selectTasks } from '../../../../model/tasks-selectors';
-import { useAppSelector } from '@/common/hooks/useAppSelector';
+import { useAppSelector } from '@/common/hooks';
 import { Todolist } from '@/app/App';
 import { TaskItem } from './TaskItem/Task';
 

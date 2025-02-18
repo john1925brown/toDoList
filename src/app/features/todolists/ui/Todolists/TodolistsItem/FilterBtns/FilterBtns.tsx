@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { FilterValues, Todolist } from '@/app/App';
-import { useAppDispatch } from '@/common/hooks/useAppDispatch';
+import { useAppDispatch } from '@/common/hooks';
 import { changeTodolistFilterAC } from '../../../../model/todolists-reducer';
 import { containerSx } from '@/common/styles/Container.styles';
 

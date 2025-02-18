@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/common/hooks/useAppSelector';
+import { useAppSelector } from '@/common/hooks';
 import { selectTodolists } from '@/app/features/todolists/model/todolists-selectors';
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
