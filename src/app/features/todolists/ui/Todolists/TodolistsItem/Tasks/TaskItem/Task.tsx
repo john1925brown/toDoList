@@ -1,29 +1,25 @@
-import { getListItemSx } from '@/common/styles/TodolistItem.styles';
-import { ChangeEvent } from 'react';
-import Checkbox from '@mui/material/Checkbox';
-import { EditableSpan } from '@/common/components/EditableSpan/EditableSpan';
-import IconButton from '@mui/material/IconButton';
-import { useAppDispatch } from '@/common/hooks';
-import { ListItem } from '@mui/material';
-import {
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  deleteTaskAC,
-} from '../../../../../model/tasks-reducer';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Task } from '@/app/App';
+import { getListItemSx } from "@/common/styles"
+import { ChangeEvent } from "react"
+import Checkbox from "@mui/material/Checkbox"
+import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
+import IconButton from "@mui/material/IconButton"
+import { useAppDispatch } from "@/common/hooks"
+import { ListItem } from "@mui/material"
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from "../../../../../model/tasks-reducer"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { Task } from "@/app/App"
 
 type Props = {
-  task: Task;
-  todolistId: string;
-};
+  task: Task
+  todolistId: string
+}
 
 export const TaskItem = ({ task, todolistId }: Props) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const deleteTaskHandler = () => {
-    dispatch(deleteTaskAC({ todolistId: todolistId, taskId: task.id }));
-  };
+    dispatch(deleteTaskAC({ todolistId: todolistId, taskId: task.id }))
+  }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(
@@ -31,9 +27,9 @@ export const TaskItem = ({ task, todolistId }: Props) => {
         todolistId: todolistId,
         taskId: task.id,
         isDone: e.currentTarget.checked,
-      })
-    );
-  };
+      }),
+    )
+  }
 
   const changeTaskTitleHandler = (title: string) => {
     dispatch(
@@ -41,9 +37,9 @@ export const TaskItem = ({ task, todolistId }: Props) => {
         todolistId: todolistId,
         taskId: task.id,
         title: title,
-      })
-    );
-  };
+      }),
+    )
+  }
   return (
     <ListItem sx={getListItemSx(task.isDone)}>
       <div>
@@ -54,5 +50,5 @@ export const TaskItem = ({ task, todolistId }: Props) => {
         <DeleteIcon />
       </IconButton>
     </ListItem>
-  );
-};
+  )
+}
