@@ -17,12 +17,11 @@ export const AppHttpRequests = () => {
       setTodolists(todolists)
       todolists.forEach((todolist) => {
         tasktApi.getTask(todolist.id).then((res) => {
-          setTasks({ ...tasks, [todolist.id]: res.data.items })
+          setTasks((prevState) => ({ ...prevState, [todolist.id]: res.data.items }))
         })
       })
     })
   }, [])
-  console.log(tasks)
 
   const createTodolist = (title: string) => {
     todolistApi.createTodolists(title).then((res) => {
@@ -54,7 +53,13 @@ export const AppHttpRequests = () => {
     })
   }
 
-  const deleteTask = (todolistId: string, taskId: string) => {}
+  const deleteTask = (todolistId: string, taskId: string) => {
+    tasktApi.deleteTask(todolistId, taskId).then(() => {
+      console.log(tasks)
+      console.log(tasks[todolistId])
+      setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter((task) => task.id !== taskId) })
+    })
+  }
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>, task: Task) => {
     const todoListId = task.todoListId
@@ -73,7 +78,9 @@ export const AppHttpRequests = () => {
     })
   }
 
-  const changeTaskTitle = (task: any, title: string) => {}
+  const changeTaskTitle = (task: any, title: string) => {
+    
+  }
 
   return (
     <div style={{ margin: "20px" }}>
