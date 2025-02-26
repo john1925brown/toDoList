@@ -1,12 +1,12 @@
 import { instance } from "@/common/instance"
-import { Todolist } from "./todolistApi.types"
+import { Todolist } from "./todolistsApi.types"
 import { BaseResponse } from "@/common/types"
 
-export const todolistApi = {
+export const todolistsApi = {
   getTodolists() {
     return instance.get<Todolist[]>("/todo-lists")
   },
-  createTodolists(title: string) {
+  createTodolist(title: string) {
     return instance.post<BaseResponse<{ item: Todolist }>>("/todo-lists", {
       title,
     })
