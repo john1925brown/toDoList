@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/common/hooks"
 import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
 import { IconButton } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { changeTodolistTitleAC, deleteTodolistAC } from "@/app/features/todolists/model/todolists-reducer"
+import { changeTodolistTitleAC, deleteTodolistAC } from "@/app/features/todolists/model/todolists-slice"
 import s from "./TodolistTitle.module.css"
 
 type Props = {

@@ -2,7 +2,7 @@ import { useAppDispatch } from "@/common/hooks"
 import { FilterBtns } from "./FilterBtns/FilterBtns"
 import { Tasks } from "./Tasks/Tasks"
 import { Todolist } from "@/app/App"
-import { createTaskAC } from "../../../model/tasks-reducer"
+import { createTaskAC } from "../../../model/tasks-slice"
 import { CreateItemForm } from "@/common/components/CreateItemForm/CreateItemForm"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 
