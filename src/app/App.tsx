@@ -7,8 +7,7 @@ import { Main } from "@/app/features/todolists/model/MainApp"
 import { Header } from "@/common/components/Header/Header"
 import { selectThemeMode } from "./app-slice"
 import { useEffect } from "react"
-import { todolistsApi } from "./features/todolists/api/todolistsApi"
-import { setTodolistsAC } from "./features/todolists/model/todolists-slice"
+import { setTodolistsTC } from "./features/todolists/model/todolists-slice"
 
 export type Todolist = {
   id: string
@@ -33,13 +32,7 @@ export const App = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    todolistsApi.getTodolists().then((res) => {
-      const todolists = res.data
-
-      console.log(todolists)
-
-      dispatch(setTodolistsAC({todolists: todolists}))
-    })
+    dispatch(setTodolistsTC())
   }, [])
 
   return (

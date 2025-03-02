@@ -39,16 +39,6 @@ export const AppHttpRequests = () => {
     })
   }
 
-  const changeTodolistTitle = (id: string, title: string) => {
-    todolistsApi.updateTodolist(id, title).then(() => {
-      setTodolists(
-        todolists.map((todo) => {
-          return todo.id === id ? { ...todo, title } : todo
-        }),
-      )
-    })
-  }
-
   const createTask = (todolistId: string, title: string) => {
     tasksApi.createTask(todolistId, title).then((res) => {
       const newTask = res.data.data.item
@@ -106,7 +96,6 @@ export const AppHttpRequests = () => {
       {todolists.map((todolist: Todolist) => (
         <div key={todolist.id} style={container}>
           <div>
-            <EditableSpan value={todolist.title} onChange={(title) => changeTodolistTitle(todolist.id, title)} />
             <button onClick={() => deleteTodolist(todolist.id)}>x</button>
           </div>
           <CreateItemForm onCreateItem={(title) => createTask(todolist.id, title)} />
