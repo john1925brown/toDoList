@@ -2,11 +2,10 @@ import { AppBar, Toolbar, Container, IconButton } from "@mui/material"
 import Switch from "@mui/material/Switch"
 import MenuIcon from "@mui/icons-material/Menu"
 import { useDispatch } from "react-redux"
-import { changeThemeModeAC } from "@/app/app-reducer"
+import { changeThemeModeAC, selectThemeMode } from "@/app/app-slice"
 import { getTheme } from "@/common/theme"
 import { useAppSelector } from "@/common/hooks"
 import { NavButton } from "../NavButton/NavButton"
-import { selectThemeMode } from "@/app/features/todolists/model/app-selector"
 import { containerSx } from "@/common/styles"
 
 export const Header = () => {
