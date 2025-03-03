@@ -1,8 +1,8 @@
 import { List } from "@mui/material"
-import { selectTasks } from "../../../../model/tasks-selectors"
 import { useAppSelector } from "@/common/hooks"
 import { TaskItem } from "./TaskItem/Task"
 import { DomainTodolist } from "@/app/features/todolists/model/todolists-slice"
+import { selectTasks } from "@/app/features/todolists/model/tasks-slice"
 
 type Props = {
   todolist: DomainTodolist
