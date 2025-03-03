@@ -1,11 +1,13 @@
 import "./App.css"
 import CssBaseline from "@mui/material/CssBaseline"
 import { ThemeProvider } from "@mui/material/styles"
-import { useAppSelector } from "@/common/hooks"
+import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
-import { selectThemeMode } from "@/app/features/todolists/model/app-selector"
 import { Main } from "@/app/features/todolists/model/MainApp"
 import { Header } from "@/common/components/Header/Header"
+import { selectThemeMode } from "./app-slice"
+import { useEffect } from "react"
+import { setTodolistsTC } from "./features/todolists/model/todolists-slice"
 
 export type Todolist = {
   id: string
@@ -27,6 +29,11 @@ export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
 
   const theme = getTheme(themeMode)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(setTodolistsTC())
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>

@@ -5,7 +5,7 @@ import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import { useAppDispatch } from "@/common/hooks"
 import { ListItem } from "@mui/material"
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from "../../../../../model/tasks-reducer"
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from "../../../../../model/tasks-slice"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { Task } from "@/app/App"
 

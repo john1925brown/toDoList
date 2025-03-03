@@ -8,8 +8,8 @@ import { AppHttpRequests } from "./app/AppHttpRequests"
 createRoot(document.getElementById("root")!).render(
   <>
     <Provider store={store}>
-      {/* <App /> */}
-      <AppHttpRequests />
+      <App />
+      {/* <AppHttpRequests /> */}
     </Provider>
   </>,
 )
