@@ -2,17 +2,17 @@ import { Todolist } from "./../api/todolistsApi.types"
 import type { FilterValues } from "../../../App"
 import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit"
 import { todolistsApi } from "../api/todolistsApi"
-import { RootState } from "@/app/store"
 
 export type DomainTodolist = Todolist & {
   filter: FilterValues
 }
 
-export const selectTodolists = (state: RootState) => state.todolists
-
 export const todolistsSlice = createSlice({
   name: "todolists",
   initialState: [] as DomainTodolist[],
+  selectors: {
+    selectTodolists: (state) => state,
+  },
   reducers: (create) => {
     return {
       changeTodolistFilterAC: create.reducer<{
@@ -24,22 +24,6 @@ export const todolistsSlice = createSlice({
           state[index].filter = action.payload.filter
         }
       }),
-
-      createTodolistAC: create.preparedReducer(
-        (title: string) => {
-          return { payload: { title, id: nanoid() } }
-        },
-        (state, action) => {
-          const newTodolist: DomainTodolist = {
-            title: action.payload.title,
-            id: action.payload.id,
-            addedDate: "",
-            filter: "all",
-            order: 0,
-          }
-          state.push(newTodolist)
-        },
-      ),
     }
   },
   extraReducers: (builder) => {
@@ -63,6 +47,9 @@ export const todolistsSlice = createSlice({
         if (index !== -1) {
           state.splice(index, 1)
         }
+      })
+      .addCase(createTodolistTC.fulfilled, (state, action) => {
+        state.unshift({ ...action.payload.todolist, filter: "all" })
       })
   },
 })
@@ -101,5 +88,18 @@ export const deleteTodolistTC = createAsyncThunk(
   },
 )
 
-export const { changeTodolistFilterAC, createTodolistAC } = todolistsSlice.actions
+export const createTodolistTC = createAsyncThunk(
+  `${todolistsSlice.name}/createTodolistTitleTC`,
+  async (args: { title: string }, thunkAPI) => {
+    try {
+      const res = await todolistsApi.createTodolist(args.title)
+      return { todolist: res.data.data.item }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(null)
+    }
+  },
+)
+
+export const { selectTodolists } = todolistsSlice.selectors
+export const { changeTodolistFilterAC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer

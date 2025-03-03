@@ -1,13 +1,13 @@
 import type { TasksState } from "../../../App"
 import { createSlice } from "@reduxjs/toolkit"
-import { createTodolistAC, deleteTodolistTC } from "./todolists-slice"
-import { RootState } from "@/app/store"
-
-export const selectTasks = (state: RootState) => state.tasks
+import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 
 export const tasksSlice = createSlice({
   name: "tasks",
   initialState: {} as TasksState,
+  selectors: {
+    selectTasks: (state) => state,
+  },
   reducers: (create) => {
     return {
       deleteTaskAC: create.reducer<{
@@ -48,8 +48,8 @@ export const tasksSlice = createSlice({
   extraReducers: (builder) => {
     // для подредьюсеров, которые обрабатываются в других слайсов
     builder
-      .addCase(createTodolistAC, (state, action) => {
-        state[action.payload.id] = []
+      .addCase(createTodolistTC.fulfilled, (state, action) => {
+        state[action.payload.todolist.id] = []
       })
       .addCase(deleteTodolistTC.fulfilled, (state, action) => {
         delete state[action.payload.id]
@@ -57,5 +57,6 @@ export const tasksSlice = createSlice({
   },
 })
 
+export const { selectTasks } = tasksSlice.selectors
 export const { deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC, createTaskAC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
