@@ -7,15 +7,18 @@ import { useAppDispatch } from "@/common/hooks"
 import { ListItem } from "@mui/material"
 import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from "../../../../../model/tasks-slice"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { Task } from "@/app/App"
+import { DomainTask } from "@/app/features/todolists/api/tasksApi.types"
+import { TaskStatus } from "@/common/enums/enums"
 
 type Props = {
-  task: Task
+  task: DomainTask
   todolistId: string
 }
 
 export const TaskItem = ({ task, todolistId }: Props) => {
   const dispatch = useAppDispatch()
+
+  const isTaskCompleted = task.status === TaskStatus.Completed
 
   const deleteTaskHandler = () => {
     dispatch(deleteTaskAC({ todolistId: todolistId, taskId: task.id }))
@@ -41,9 +44,9 @@ export const TaskItem = ({ task, todolistId }: Props) => {
     )
   }
   return (
-    <ListItem sx={getListItemSx(task.isDone)}>
+    <ListItem sx={getListItemSx(isTaskCompleted)}>
       <div>
-        <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler} />
+        <Checkbox checked={isTaskCompleted} onChange={changeTaskStatusHandler} />
         <EditableSpan value={task.title} onChange={changeTaskTitleHandler} />
       </div>
       <IconButton onClick={deleteTaskHandler}>

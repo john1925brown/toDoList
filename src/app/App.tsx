@@ -7,7 +7,8 @@ import { Main } from "@/app/features/todolists/model/MainApp"
 import { Header } from "@/common/components/Header/Header"
 import { selectThemeMode } from "./app-slice"
 import { useEffect } from "react"
-import { setTodolistsTC } from "./features/todolists/model/todolists-slice"
+import { fetchTodolistsTC } from "./features/todolists/model/todolists-slice"
+import { DomainTask } from "./features/todolists/api/tasksApi.types"
 
 export type Todolist = {
   id: string
@@ -15,15 +16,9 @@ export type Todolist = {
   filter: FilterValues
 }
 
-export type Task = {
-  id: string
-  title: string
-  isDone: boolean
-}
-
 export type FilterValues = "all" | "active" | "completed"
 
-export type TasksState = Record<string, Task[]>
+export type TasksState = Record<string, DomainTask[]>
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -32,7 +27,7 @@ export const App = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(setTodolistsTC())
+    dispatch(fetchTodolistsTC())
   }, [])
 
   return (
