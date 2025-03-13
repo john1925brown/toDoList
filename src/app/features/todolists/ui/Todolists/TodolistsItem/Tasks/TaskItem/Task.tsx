@@ -5,7 +5,7 @@ import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import { useAppDispatch } from "@/common/hooks"
 import { ListItem } from "@mui/material"
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from "../../../../../model/tasks-slice"
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC } from "../../../../../model/tasks-slice"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { DomainTask } from "@/app/features/todolists/api/tasksApi.types"
 import { TaskStatus } from "@/common/enums/enums"
@@ -21,7 +21,7 @@ export const TaskItem = ({ task, todolistId }: Props) => {
   const isTaskCompleted = task.status === TaskStatus.Completed
 
   const deleteTaskHandler = () => {
-    dispatch(deleteTaskAC({ todolistId: todolistId, taskId: task.id }))
+    dispatch(deleteTaskTC({ todolistId: todolistId, taskId: task.id }))
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
