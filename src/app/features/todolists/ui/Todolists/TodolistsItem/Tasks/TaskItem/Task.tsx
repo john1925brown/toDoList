@@ -5,45 +5,50 @@ import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import { useAppDispatch } from "@/common/hooks"
 import { ListItem } from "@mui/material"
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from "../../../../../model/tasks-slice"
+import { deleteTaskTC, updateTaskTC } from "../../../../../model/tasks-slice"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { Task } from "@/app/App"
+import { DomainTask } from "@/app/features/todolists/api/tasksApi.types"
+import { TaskStatus } from "@/common/enums/enums"
 
 type Props = {
-  task: Task
+  task: DomainTask
   todolistId: string
 }
 
 export const TaskItem = ({ task, todolistId }: Props) => {
   const dispatch = useAppDispatch()
 
+  const isTaskCompleted = task.status === TaskStatus.Completed
+
   const deleteTaskHandler = () => {
-    dispatch(deleteTaskAC({ todolistId: todolistId, taskId: task.id }))
+    dispatch(deleteTaskTC({ todolistId: todolistId, taskId: task.id }))
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+
     dispatch(
-      changeTaskStatusAC({
+      updateTaskTC({
         todolistId: todolistId,
         taskId: task.id,
-        isDone: e.currentTarget.checked,
+        domainModel: { status: status ? TaskStatus.Completed : TaskStatus.New },
       }),
     )
   }
 
   const changeTaskTitleHandler = (title: string) => {
     dispatch(
-      changeTaskTitleAC({
+      updateTaskTC({
         todolistId: todolistId,
         taskId: task.id,
-        title: title,
+        domainModel: { title },
       }),
     )
   }
   return (
-    <ListItem sx={getListItemSx(task.isDone)}>
+    <ListItem sx={getListItemSx(isTaskCompleted)}>
       <div>
-        <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler} />
+        <Checkbox checked={isTaskCompleted} onChange={changeTaskStatusHandler} />
         <EditableSpan value={task.title} onChange={changeTaskTitleHandler} />
       </div>
       <IconButton onClick={deleteTaskHandler}>

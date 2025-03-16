@@ -6,7 +6,8 @@ export const todolistsApi = {
   getTodolists() {
     return instance.get<Todolist[]>("/todo-lists")
   },
-  createTodolist(title: string) {
+  createTodolist(payload: { title: string }) {
+    const { title } = payload
     return instance.post<BaseResponse<{ item: Todolist }>>("/todo-lists", {
       title,
     })
