@@ -9,6 +9,7 @@ import { selectThemeMode } from "./app-slice"
 import { useEffect } from "react"
 import { fetchTodolistsTC } from "./features/todolists/model/todolists-slice"
 import { DomainTask } from "./features/todolists/api/tasksApi.types"
+import { ErrorSnackbar } from "@/common/components/ErrorSnackbar/ErrorSnackbar"
 
 export type Todolist = {
   id: string
@@ -36,6 +37,7 @@ export const App = () => {
         <CssBaseline />
         <Header />
         <Main />
+        <ErrorSnackbar/>
       </div>
     </ThemeProvider>
   )
