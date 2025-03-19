@@ -43,13 +43,11 @@ export const todolistsSlice = createAppSlice({
         async (_args, thunkAPI) => {
           try {
             thunkAPI.dispatch(setStatus({ status: "loading" }))
-
             const res = await todolistsApi.getTodolists()
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             return { todolists: res.data }
           } catch (error: any) {
-            thunkAPI.dispatch(setStatus({ status: "failed" }))
-            thunkAPI.dispatch(setAppError({ error: error.message }))
+            handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(error)
           }
         },
@@ -95,10 +93,10 @@ export const todolistsSlice = createAppSlice({
             await todolistsApi.deleteTodolist(args.id)
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             return args
-          } catch (error) {
+          } catch (error: any) {
             thunkAPI.dispatch(setStatus({ status: "failed" }))
             thunkAPI.dispatch(changeTodolistEntityStatusAC({ id: args.id, entityStatus: "failed" }))
-
+            handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(error)
           }
         },
@@ -115,14 +113,19 @@ export const todolistsSlice = createAppSlice({
         async (args: { id: string; title: string }, thunkAPI) => {
           try {
             thunkAPI.dispatch(setStatus({ status: "loading" }))
-            await todolistsApi.updateTodolist(args)
-            thunkAPI.dispatch(setStatus({ status: "succeeded" }))
-            return args
-          } catch (error) {
-            thunkAPI.dispatch(setStatus({ status: "failed" }))
+            const res = await todolistsApi.updateTodolist(args)
+            if (res.data.resultCode === ResultCode.Success) {
+              thunkAPI.dispatch(setAppStatusAC({ status: "succeeded" }))
+              return args
+            } else {
+              handleServerAppError(res.data, thunkAPI.dispatch)
+              return thunkAPI.rejectWithValue(null)
+            }
+            // thunkAPI.dispatch(setStatus({ status: "succeeded" }))
+            // return args
+          } catch (error: any) {
+            handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(error)
-          } finally {
-            thunkAPI.dispatch(setStatus({ status: "idle" }))
           }
         },
         {
@@ -148,3 +151,6 @@ export const {
   changeTodolistTitleTC,
 } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
+function setAppStatusAC(arg0: { status: string }): any {
+  throw new Error("Function not implemented.")
+}

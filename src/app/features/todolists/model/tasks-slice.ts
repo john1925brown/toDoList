@@ -5,7 +5,7 @@ import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { CreateTaskArgs, DeleteTaskArgs, UpdateTaskModel } from "../api/tasksApi.types"
 import { RootState } from "@/app/store"
-import { setAppError, setStatus } from "@/app/app-slice"
+import { setStatus } from "@/app/app-slice"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -22,11 +22,9 @@ export const tasksSlice = createAppSlice({
             const res = await tasksApi.getTasks(todolistId)
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             return { todolistId, tasks: res.data.items }
-          } catch (error) {
-            thunkAPI.dispatch(setStatus({ status: "failed" }))
+          } catch (error: any) {
+            handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
-          } finally {
-            thunkAPI.dispatch(setStatus({ status: "idle" }))
           }
         },
         {
@@ -45,7 +43,6 @@ export const tasksSlice = createAppSlice({
               thunkAPI.dispatch(setStatus({ status: "succeeded" }))
               return { task: res.data.data.item }
             } else {
-              thunkAPI.dispatch(setStatus({ status: "failed" }))
               handleServerAppError(res.data, thunkAPI.dispatch)
               return thunkAPI.rejectWithValue(null)
             }
@@ -63,9 +60,16 @@ export const tasksSlice = createAppSlice({
       deleteTaskTC: create.asyncThunk(
         async (args: DeleteTaskArgs, thunkAPI) => {
           try {
-            await tasksApi.deleteTask(args)
-            return args
-          } catch (error) {
+            const res = await tasksApi.deleteTask(args)
+            if (res.data.resultCode === ResultCode.Success) {
+              thunkAPI.dispatch(setStatus({ status: "succeeded" }))
+              return args
+            } else {
+              handleServerAppError(res.data, thunkAPI.dispatch)
+              return thunkAPI.rejectWithValue(null)
+            }
+          } catch (error: any) {
+            handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
           }
         },
@@ -88,30 +92,34 @@ export const tasksSlice = createAppSlice({
             const tasksForTodo = tasks[todolistId]
             const currentTask = tasksForTodo.find((task) => task.id === taskId)
 
-            if (currentTask) {
-              const model: UpdateTaskModel = {
-                status: currentTask.status,
-                title: currentTask.title,
-                priority: currentTask.priority,
-                deadline: currentTask.deadline,
-                description: currentTask.description,
-                startDate: currentTask.startDate,
-                ...domainModel,
-              }
+            if (!currentTask) {
+              thunkAPI.dispatch(setStatus({ status: "failed" }))
+              return thunkAPI.rejectWithValue(null)
+            }
 
-              thunkAPI.dispatch(setStatus({ status: "loading" }))
-              const res = await tasksApi.updateTask({ todolistId, taskId, model })
+            const model: UpdateTaskModel = {
+              status: currentTask.status,
+              title: currentTask.title,
+              priority: currentTask.priority,
+              deadline: currentTask.deadline,
+              description: currentTask.description,
+              startDate: currentTask.startDate,
+              ...domainModel,
+            }
+
+            thunkAPI.dispatch(setStatus({ status: "loading" }))
+            const res = await tasksApi.updateTask({ todolistId, taskId, model })
+
+            if (res.data.resultCode === ResultCode.Success) {
               thunkAPI.dispatch(setStatus({ status: "succeeded" }))
               return { task: res.data.data.item }
             } else {
-              thunkAPI.dispatch(setStatus({ status: "failed" }))
-              thunkAPI.rejectWithValue(null)
+              handleServerAppError(res.data, thunkAPI.dispatch)
+              return thunkAPI.rejectWithValue(null)
             }
           } catch (error: any) {
             handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
-          } finally {
-            thunkAPI.dispatch(setStatus({ status: "idle" }))
           }
         },
         {
