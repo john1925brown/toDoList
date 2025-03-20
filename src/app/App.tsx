@@ -3,13 +3,13 @@ import CssBaseline from "@mui/material/CssBaseline"
 import { ThemeProvider } from "@mui/material/styles"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
-import { Main } from "@/app/features/todolists/model/MainApp"
 import { Header } from "@/common/components/Header/Header"
 import { selectThemeMode } from "./app-slice"
 import { useEffect } from "react"
 import { fetchTodolistsTC } from "./features/todolists/model/todolists-slice"
 import { DomainTask } from "./features/todolists/api/tasksApi.types"
 import { ErrorSnackbar } from "@/common/components/ErrorSnackbar/ErrorSnackbar"
+import { Routing } from "@/common/routing"
 
 export type Todolist = {
   id: string
@@ -36,8 +36,8 @@ export const App = () => {
       <div className={"app"}>
         <CssBaseline />
         <Header />
-        <Main />
-        <ErrorSnackbar/>
+        <Routing />
+        <ErrorSnackbar />
       </div>
     </ThemeProvider>
   )
