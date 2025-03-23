@@ -1,8 +1,8 @@
-import { Todolist } from "./../api/todolistsApi.types"
+import { domainTodolistSchema, Todolist } from "./../api/todolistsApi.types"
 import type { FilterValues } from "../../../App"
 import { todolistsApi } from "../api/todolistsApi"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
-import { setAppError, setStatus } from "@/app/app-slice"
+import { setStatus } from "@/app/app-slice"
 import { RequestStatus } from "@/common/types"
 import { ResultCode } from "@/common/enums/enums"
 
@@ -44,6 +44,7 @@ export const todolistsSlice = createAppSlice({
           try {
             thunkAPI.dispatch(setStatus({ status: "loading" }))
             const res = await todolistsApi.getTodolists()
+            domainTodolistSchema.array().parse(res.data)
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             return { todolists: res.data }
           } catch (error: any) {

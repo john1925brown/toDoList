@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Inputs, loginSchema } from "@/app/features/todolists/api/lib/schemas"
+import { Inputs, loginSchema } from "@/app/features/todolists/api/lib/schemas/LoginSchema"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -63,6 +63,7 @@ export const Login = () => {
             <TextField label="Email" margin="normal" {...register("email")} error={!!errors.email} />
             {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
             <TextField type="password" label="Password" margin="normal" {...register("password")} />
+            {errors.password && <span className={styles.errorMessage}>{errors.password.message}</span>}
             <FormControlLabel
               control={
                 <Controller

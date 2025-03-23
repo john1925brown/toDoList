@@ -7,6 +7,15 @@ import { CreateTaskArgs, DeleteTaskArgs, domainTaskSchema, UpdateTaskModel } fro
 import { RootState } from "@/app/store"
 import { setStatus } from "@/app/app-slice"
 
+
+
+
+
+
+
+
+
+
 export const tasksSlice = createAppSlice({
   name: "tasks",
   initialState: {} as TasksState,
@@ -27,6 +36,7 @@ export const tasksSlice = createAppSlice({
           } catch (error: any) {
             handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
+          } finally {
           }
         },
         {
