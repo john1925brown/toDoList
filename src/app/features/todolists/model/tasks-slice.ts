@@ -3,9 +3,18 @@ import type { TasksState } from "../../../App"
 import { tasksApi } from "../api/tasksApi"
 import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
-import { CreateTaskArgs, DeleteTaskArgs, UpdateTaskModel } from "../api/tasksApi.types"
+import { CreateTaskArgs, DeleteTaskArgs, domainTaskSchema, UpdateTaskModel } from "../api/tasksApi.types"
 import { RootState } from "@/app/store"
 import { setStatus } from "@/app/app-slice"
+
+
+
+
+
+
+
+
+
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -19,12 +28,15 @@ export const tasksSlice = createAppSlice({
         async (todolistId: string, thunkAPI) => {
           try {
             thunkAPI.dispatch(setStatus({ status: "loading" }))
+            //zod
             const res = await tasksApi.getTasks(todolistId)
+            domainTaskSchema.array().parse(res.data.items)
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             return { todolistId, tasks: res.data.items }
           } catch (error: any) {
             handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
+          } finally {
           }
         },
         {
