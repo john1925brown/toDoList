@@ -8,7 +8,8 @@ export const loginSchema = z.object({
     .refine((value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value), {
       message: "Must be 8+ chars, incl. uppercase & number.",
     }),
-  rememberMe: z.boolean(),
+  rememberMe: z.boolean().optional(),
+  captcha: z.string().optional(),
 })
 
 export type Inputs = z.infer<typeof loginSchema>

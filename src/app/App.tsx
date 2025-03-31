@@ -6,10 +6,10 @@ import { getTheme } from "@/common/theme"
 import { Header } from "@/common/components/Header/Header"
 import { selectThemeMode } from "./app-slice"
 import { useEffect } from "react"
-import { fetchTodolistsTC } from "./features/todolists/model/todolists-slice"
-import { DomainTask } from "./features/todolists/api/tasksApi.types"
 import { ErrorSnackbar } from "@/common/components/ErrorSnackbar/ErrorSnackbar"
 import { Routing } from "@/common/routing"
+import { DomainTask } from "@/features/todolists/api/tasksApi.types"
+import { fetchTodolistsTC } from "@/features/todolists/model/todolists-slice"
 
 export type Todolist = {
   id: string

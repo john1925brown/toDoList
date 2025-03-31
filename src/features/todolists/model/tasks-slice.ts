@@ -1,11 +1,11 @@
 import { ResultCode } from "@/common/enums/enums"
-import type { TasksState } from "../../../App"
 import { tasksApi } from "../api/tasksApi"
 import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { CreateTaskArgs, DeleteTaskArgs, domainTaskSchema, UpdateTaskModel } from "../api/tasksApi.types"
 import { RootState } from "@/app/store"
 import { setStatus } from "@/app/app-slice"
+import { TasksState } from "@/app/App"
 
 
 

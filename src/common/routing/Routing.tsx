@@ -1,7 +1,7 @@
-import { Login } from "@/app/features/auth/ui/login/Login"
-import { Main } from "@/app/features/todolists/model/MainApp"
 import { Route, Routes } from "react-router"
 import { PageNotFound } from "../components"
+import { Main } from "@/features/todolists/model/MainApp"
+import { Login } from "@/features/auth/ui/login/Login"
 
 export const Path = {
   Main: "/",
