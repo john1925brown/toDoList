@@ -63,9 +63,34 @@ export const authSlice = createAppSlice({
         },
       },
     ),
+    initializeAppTC: create.asyncThunk(
+      async (_args, thunkAPI) => {
+        try {
+          thunkAPI.dispatch(setStatus({ status: "loading" }))
+          const res = await authApi.me()
+
+          if (res.data.resultCode === ResultCode.Success) {
+            thunkAPI.dispatch(setStatus({ status: "succeeded" }))
+            return { isLoggedIn: true }
+          } else {
+            thunkAPI.dispatch(setStatus({ status: "failed" }))
+            handleServerAppError(res.data, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue(null)
+          }
+        } catch (error: any) {
+          handleServerNetworkError(error, thunkAPI.dispatch)
+          return thunkAPI.rejectWithValue(error)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          state.isLoggedIn = action.payload.isLoggedIn
+        },
+      },
+    ),
   }),
 })
 
 export const { selectIsLoggedIn } = authSlice.selectors
-export const { loginTC, logoutTC } = authSlice.actions
+export const { loginTC, logoutTC, initializeAppTC } = authSlice.actions
 export const authReducer = authSlice.reducer
