@@ -13,23 +13,11 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Inputs, loginSchema } from "@/features/todolists/api/lib/schemas/LoginSchema"
-import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
-import { useNavigate } from "react-router"
-import { useEffect } from "react"
-import { Path } from "@/common/routing/Routing"
+import { loginTC } from "../../model/authSlice"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const dispatch = useAppDispatch()
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate(Path.Main)
-    }
-  }, [isLoggedIn])
 
   const theme = getTheme(themeMode)
 
