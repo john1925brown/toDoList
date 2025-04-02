@@ -4,6 +4,7 @@ import { Inputs } from "@/features/todolists/api/lib/schemas/LoginSchema"
 import { authApi } from "../api/authApi"
 import { ResultCode } from "@/common/enums/enums"
 import { AUTH_TOKEN } from "@/common/contains"
+import { clearDataAC } from "@/common/actions"
 
 export const authSlice = createAppSlice({
   name: "auth",
@@ -43,9 +44,11 @@ export const authSlice = createAppSlice({
           thunkAPI.dispatch(setStatus({ status: "loading" }))
           const res = await authApi.logout()
 
+
           if (res.data.resultCode === ResultCode.Success) {
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             localStorage.removeItem(AUTH_TOKEN)
+            thunkAPI.dispatch(clearDataAC())
             return { isLoggedIn: false }
           } else {
             thunkAPI.dispatch(setStatus({ status: "failed" }))
