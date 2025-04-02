@@ -1,10 +1,11 @@
 import { domainTodolistSchema, Todolist } from "./../api/todolistsApi.types"
-import type { FilterValues } from "../../../App"
 import { todolistsApi } from "../api/todolistsApi"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { setStatus } from "@/app/app-slice"
 import { RequestStatus } from "@/common/types"
 import { ResultCode } from "@/common/enums/enums"
+import { FilterValues } from "@/app/App"
+import { clearDataAC } from "@/common/actions"
 
 export type DomainTodolist = Todolist & {
   filter: FilterValues
@@ -122,8 +123,6 @@ export const todolistsSlice = createAppSlice({
               handleServerAppError(res.data, thunkAPI.dispatch)
               return thunkAPI.rejectWithValue(null)
             }
-            // thunkAPI.dispatch(setStatus({ status: "succeeded" }))
-            // return args
           } catch (error: any) {
             handleServerNetworkError(error, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(error)
@@ -140,6 +139,11 @@ export const todolistsSlice = createAppSlice({
       ),
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(clearDataAC, () => {
+      return []
+    })
+  },
 })
 
 export const { selectTodolists } = todolistsSlice.selectors
@@ -152,6 +156,6 @@ export const {
   changeTodolistTitleTC,
 } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
-function setAppStatusAC(arg0: { status: string }): any {
+function setAppStatusAC(_args: { status: string }): any {
   throw new Error("Function not implemented.")
 }
