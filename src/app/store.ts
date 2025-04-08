@@ -1,23 +1,27 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { appReducer } from "./app-slice"
-import { tasksReducer } from "@/features/todolists/model/tasks-slice"
-import { todolistsReducer } from "@/features/todolists/model/todolists-slice"
-import { authReducer } from "@/features/auth/model/authSlice"
+import { appReducer, appSlice } from "./app-slice"
+import { tasksReducer, tasksSlice } from "@/features/todolists/model/tasks-slice"
+import { todolistsReducer, todolistsSlice } from "@/features/todolists/model/todolists-slice"
+import { authReducer, authSlice } from "@/features/auth/model/authSlice"
+import { todolistsApi } from "@/features/todolists/api/todolistsApi"
+import { setupListeners } from "@reduxjs/toolkit/query"
 
 export const store = configureStore({
   reducer: {
-    tasks: tasksReducer,
-    todolists: todolistsReducer,
-    app: appReducer,
-    auth: authReducer,
+    [tasksSlice.name]: tasksReducer,
+    [todolistsSlice.name]: todolistsReducer,
+    [appSlice.name]: appReducer,
+    [authSlice.name]: authReducer,
+    [todolistsApi.reducerPath]: todolistsApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(todolistsApi.middleware),
 })
 
-// автоматическое определение типа всего объекта состояния
+setupListeners(store.dispatch)
+
 export type RootState = ReturnType<typeof store.getState>
-// автоматическое определение типа метода dispatch
+
 export type AppDispatch = typeof store.dispatch
 
-// для возможности обращения к store в консоли браузера
 // @ts-ignore
 window.store = store
