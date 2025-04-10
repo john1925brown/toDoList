@@ -1,9 +1,8 @@
 import { instance } from "@/common/instance"
 import { Todolist } from "./todolistsApi.types"
 import { BaseResponse } from "@/common/types"
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { AUTH_TOKEN } from "@/common/contains"
 import { DomainTodolist } from "../model/todolists-slice"
+import { baseApi } from "@/app/baseApi"
 
 export const _todolistsApi = {
   getTodolists() {
@@ -24,18 +23,7 @@ export const _todolistsApi = {
   },
 }
 
-export const todolistsApi = createApi({
-  reducerPath: "todolistsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BASE_URL,
-    prepareHeaders: (headers) => {
-      headers.set("API-KEY", import.meta.env.VITE_API_KEY)
-      headers.set("Authorization", `Bearer ${localStorage.getItem(AUTH_TOKEN)}`)
-    },
-  }),
-  // `endpoints` - метод, возвращающий объект с эндпоинтами для `API`, описанными
-  // с помощью функций, которые будут вызываться при вызове соответствующих методов `API`
-  // (например `get`, `post`, `put`, `patch`, `delete`)
+export const todolistsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     // Типизация аргументов (<возвращаемый тип, тип query аргументов (`QueryArg`)>)
     // `query` по умолчанию создает запрос `get` и указание метода необязательно
@@ -50,6 +38,7 @@ export const todolistsApi = createApi({
           return { ...todolist, filter: "all", entityStatus: "idle" }
         })
       },
+      providesTags: ["Todolist"],
     }),
     createTodolist: build.mutation<BaseResponse<{ item: Todolist }>, string>({
       query: (title) => {
@@ -61,6 +50,7 @@ export const todolistsApi = createApi({
           },
         }
       },
+      invalidatesTags: ["Todolist"],
     }),
     deleteTodolist: build.mutation<BaseResponse, string>({
       query: (id) => {
@@ -69,6 +59,7 @@ export const todolistsApi = createApi({
           url: `/todo-lists/${id}`,
         }
       },
+      invalidatesTags: ["Todolist"],
     }),
     updateTodolistTitle: build.mutation<BaseResponse, { id: string; title: string }>({
       query: ({ id, title }) => {
@@ -78,9 +69,10 @@ export const todolistsApi = createApi({
           body: { title },
         }
       },
+      invalidatesTags: ["Todolist"],
     }),
   }),
-}) 
+})
 
 export const {
   useGetTodolistsQuery,

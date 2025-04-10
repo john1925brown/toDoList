@@ -4,7 +4,7 @@ import { Main } from "@/features/todolists/model/MainApp"
 import { Login } from "@/features/auth/ui/login/Login"
 import { ProtectedRoute } from "../components/ProtectedRoute/ProtectedRoute"
 import { useAppSelector } from "../hooks"
-import { selectIsLoggedIn } from "@/features/auth/model/authSlice"
+import { selectIsLoggedIn } from "@/app/app-slice"
 
 export const Path = {
   Main: "/",
