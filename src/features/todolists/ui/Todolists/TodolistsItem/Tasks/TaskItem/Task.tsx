@@ -5,10 +5,12 @@ import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import { useAppDispatch } from "@/common/hooks"
 import { ListItem } from "@mui/material"
-import { deleteTaskTC, updateTaskTC } from "../../../../../model/tasks-slice"
+import { updateTaskTC } from "../../../../../model/tasks-slice"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { DomainTask } from "@/app/features/todolists/api/tasksApi.types"
 import { TaskStatus } from "@/common/enums/enums"
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolists/api/tasksApi"
+import { DomainTask } from "@/features/todolists/api/tasksApi.types"
+import { createTaskModel } from "@/features/todolists/lib/utils/createTaskModel"
 
 type Props = {
   task: DomainTask
@@ -17,35 +19,28 @@ type Props = {
 }
 
 export const TaskItem = ({ task, todolistId, disabled }: Props) => {
-  const dispatch = useAppDispatch()
+  const [deleteTask] = useDeleteTaskMutation()
+  const [updateTask] = useUpdateTaskMutation()
 
   const isTaskCompleted = task.status === TaskStatus.Completed
 
   const deleteTaskHandler = () => {
-    dispatch(deleteTaskTC({ todolistId: todolistId, taskId: task.id }))
+    deleteTask({ todolistId, taskId: task.id })
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-
-    dispatch(
-      updateTaskTC({
-        todolistId: todolistId,
-        taskId: task.id,
-        domainModel: { status: status ? TaskStatus.Completed : TaskStatus.New },
-      }),
-    )
+    const model = createTaskModel(task, { status })
+    console.log(e.currentTarget.checked )
+    updateTask({ todolistId, taskId: task.id, model })
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    dispatch(
-      updateTaskTC({
-        todolistId: todolistId,
-        taskId: task.id,
-        domainModel: { title },
-      }),
-    )
+    const model = createTaskModel(task, { title })
+
+    updateTask({ todolistId, taskId: task.id, model })
   }
+
   return (
     <ListItem sx={getListItemSx(isTaskCompleted)}>
       <div>

@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { TaskStatus } from "@/common/enums/enums"
 import { DomainTodolist } from "@/features/todolists/model/todolists-slice"
 import { fetchTasksTC, selectTasks } from "@/features/todolists/model/tasks-slice"
+import { useGetTasksQuery } from "@/features/todolists/api/tasksApi"
 
 type Props = {
   todolist: DomainTodolist
@@ -13,17 +14,13 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const { id, filter } = todolist
   const entityStatus = useAppSelector((state) => state.app.status)
+  const res = useGetTasksQuery(id)
 
   const tasks = useAppSelector(selectTasks)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTasksTC(id))
-  }, [])
 
   const todolistTasks = tasks[id]
 
-  let filteredTasks = todolistTasks
+  let filteredTasks = res.data?.items
   if (filter === "active") {
     filteredTasks = todolistTasks.filter((task) => task.status === TaskStatus.New)
   }

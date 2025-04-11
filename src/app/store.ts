@@ -4,15 +4,16 @@ import { tasksReducer, tasksSlice } from "@/features/todolists/model/tasks-slice
 import { todolistsReducer, todolistsSlice } from "@/features/todolists/model/todolists-slice"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi"
 import { setupListeners } from "@reduxjs/toolkit/query"
+import { baseApi } from "./baseApi"
 
 export const store = configureStore({
   reducer: {
     [tasksSlice.name]: tasksReducer,
     [todolistsSlice.name]: todolistsReducer,
     [appSlice.name]: appReducer,
-    [todolistsApi.reducerPath]: todolistsApi.reducer,
+    [baseApi.reducerPath]: todolistsApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(todolistsApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
 })
 
 setupListeners(store.dispatch)

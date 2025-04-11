@@ -25,12 +25,6 @@ export const _todolistsApi = {
 
 export const todolistsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    // Типизация аргументов (<возвращаемый тип, тип query аргументов (`QueryArg`)>)
-    // `query` по умолчанию создает запрос `get` и указание метода необязательно
-    // getTodolists: build.query<any[], void>({
-    //   query: () => "todo-lists",
-    // }),
-
     getTodolists: build.query<any[], void>({
       query: () => "/todo-lists",
       transformResponse: (todolists: Todolist[]): DomainTodolist[] => {
