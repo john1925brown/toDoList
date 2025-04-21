@@ -1,4 +1,4 @@
-import { selectThemeMode } from "@/app/app-slice"
+import { selectThemeMode, setIsLoggedIn, setStatus } from "@/app/app-slice"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import Button from "@mui/material/Button"
@@ -13,10 +13,13 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Inputs, loginSchema } from "@/features/todolists/api/lib/schemas/LoginSchema"
-import { loginTC } from "../../model/authSlice"
+import { useLoginMutation } from "../../api/authApi"
+import { ResultCode } from "@/common/enums/enums"
+import { AUTH_TOKEN } from "@/common/contains"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
+  const [login] = useLoginMutation()
   const dispatch = useAppDispatch()
 
   const theme = getTheme(themeMode)
@@ -24,7 +27,6 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
     control,
     formState: { errors },
   } = useForm<Inputs>({
@@ -33,8 +35,12 @@ export const Login = () => {
   })
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch(loginTC(data))
-    reset()
+    login(data).then((res) => {
+      if (res.data?.resultCode === ResultCode.Success) {
+        localStorage.setItem(AUTH_TOKEN, res.data.data.token)
+        dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      }
+    })
   }
 
   return (
