@@ -1,5 +1,5 @@
 import { ResultCode } from "@/common/enums/enums"
-import { tasksApi } from "../api/tasksApi"
+import { _tasksApi } from "../api/tasksApi"
 import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { CreateTaskArgs, DeleteTaskArgs, domainTaskSchema, UpdateTaskModel } from "../api/tasksApi.types"
@@ -21,7 +21,7 @@ export const tasksSlice = createAppSlice({
           try {
             thunkAPI.dispatch(setStatus({ status: "loading" }))
             //zod
-            const res = await tasksApi.getTasks(todolistId)
+            const res = await _tasksApi.getTasks(todolistId)
             domainTaskSchema.array().parse(res.data.items)
             thunkAPI.dispatch(setStatus({ status: "succeeded" }))
             return { todolistId, tasks: res.data.items }
@@ -41,7 +41,7 @@ export const tasksSlice = createAppSlice({
         async (args: CreateTaskArgs, thunkAPI) => {
           try {
             thunkAPI.dispatch(setStatus({ status: "loading" }))
-            const res = await tasksApi.createTask(args)
+            const res = await _tasksApi.createTask(args)
 
             if (res.data.resultCode === ResultCode.Success) {
               thunkAPI.dispatch(setStatus({ status: "succeeded" }))
@@ -64,7 +64,7 @@ export const tasksSlice = createAppSlice({
       deleteTaskTC: create.asyncThunk(
         async (args: DeleteTaskArgs, thunkAPI) => {
           try {
-            const res = await tasksApi.deleteTask(args)
+            const res = await _tasksApi.deleteTask(args)
             if (res.data.resultCode === ResultCode.Success) {
               thunkAPI.dispatch(setStatus({ status: "succeeded" }))
               return args
@@ -112,7 +112,7 @@ export const tasksSlice = createAppSlice({
             }
 
             thunkAPI.dispatch(setStatus({ status: "loading" }))
-            const res = await tasksApi.updateTask({ todolistId, taskId, model })
+            const res = await _tasksApi.updateTask({ todolistId, taskId, model })
 
             if (res.data.resultCode === ResultCode.Success) {
               thunkAPI.dispatch(setStatus({ status: "succeeded" }))
