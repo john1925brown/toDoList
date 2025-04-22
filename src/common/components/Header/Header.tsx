@@ -9,6 +9,7 @@ import { containerSx } from "@/common/styles"
 import { useLogoutMutation } from "@/features/auth/api/authApi"
 import { ResultCode } from "@/common/enums/enums"
 import { AUTH_TOKEN } from "@/common/contains"
+import { baseApi } from "@/app/baseApi"
 
 export const Header = () => {
   const dispatch = useAppDispatch()
@@ -22,12 +23,16 @@ export const Header = () => {
   }
 
   const logoutHandler = () => {
-    logout().then((res) => {
-      if (res.data?.resultCode === ResultCode.Success) {
-        localStorage.removeItem(AUTH_TOKEN)
-        dispatch(setIsLoggedIn({ isLoggedIn: false }))
-      }
-    })
+    logout()
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          localStorage.removeItem(AUTH_TOKEN)
+        }
+      })
+      .then(() => {
+        dispatch(baseApi.util.invalidateTags(["Tasks", "Todolists"]))
+      })
   }
 
   const theme = getTheme(themeMode)

@@ -5,7 +5,6 @@ import { setStatus } from "@/app/app-slice"
 import { RequestStatus } from "@/common/types"
 import { ResultCode } from "@/common/enums/enums"
 import { FilterValues } from "@/app/App"
-import { clearDataAC } from "@/common/actions"
 
 export type DomainTodolist = Todolist & {
   filter: FilterValues
@@ -138,11 +137,6 @@ export const todolistsSlice = createAppSlice({
         },
       ),
     }
-  },
-  extraReducers: (builder) => {
-    builder.addCase(clearDataAC, () => {
-      return []
-    })
   },
 })
 
