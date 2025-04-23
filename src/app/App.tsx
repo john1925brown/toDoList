@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress"
 import styles from "./App.module.css"
 import { useMeQuery } from "@/features/auth/api/authApi"
 import { ResultCode } from "@/common/enums/enums"
+import { FilterValues } from "@/features/todolists/ui/Todolists/lib/types"
 
 export type Todolist = {
   id: string
@@ -19,14 +20,13 @@ export type Todolist = {
   filter: FilterValues
 }
 
-export type FilterValues = "all" | "active" | "completed"
 
 export type TasksState = Record<string, DomainTask[]>
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const [isInitialized, setIsInitialized] = useState(false)
-  const { data, isLoading } = useMeQuery()
+  const { data } = useMeQuery()
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
 

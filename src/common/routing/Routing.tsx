@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router"
 import { PageNotFound } from "../components"
-import { Main } from "@/features/todolists/model/MainApp"
+import { Main } from "@/app/MainApp"
 import { Login } from "@/features/auth/ui/login/Login"
 import { ProtectedRoute } from "../components/ProtectedRoute/ProtectedRoute"
 import { useAppSelector } from "../hooks"
