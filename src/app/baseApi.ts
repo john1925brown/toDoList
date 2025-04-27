@@ -6,7 +6,6 @@ export const baseApi = createApi({
   reducerPath: "todolistsApi",
   tagTypes: ["Todolists", "Tasks"],
   baseQuery: async (args, api, extraOptions) => {
-    // await new Promise((resolve) => setTimeout(resolve, 3000))
     const result = await fetchBaseQuery({
       baseUrl: import.meta.env.VITE_BASE_URL,
       prepareHeaders: (headers) => {
@@ -19,4 +18,6 @@ export const baseApi = createApi({
     return result
   },
   endpoints: () => ({}),
+  keepUnusedDataFor: 10,
+  refetchOnReconnect: true,
 })

@@ -1,8 +1,8 @@
 import { instance } from "@/common/instance"
 import { Todolist } from "./todolistsApi.types"
 import { BaseResponse } from "@/common/types"
-import { DomainTodolist } from "../model/todolists-slice"
 import { baseApi } from "@/app/baseApi"
+import { DomainTodolist } from "../ui/Todolists/lib/types"
 
 export const _todolistsApi = {
   getTodolists() {
@@ -29,9 +29,7 @@ export const todolistsApi = baseApi.injectEndpoints({
       query: () => "/todo-lists",
       providesTags: ["Todolists"],
       transformResponse: (todolists: Todolist[]): DomainTodolist[] => {
-        return todolists.map((todolist) => {
-          return { ...todolist, filter: "all", entityStatus: "idle" }
-        })
+        return todolists.map((todolist) => ({ ...todolist, filter: "all" }))
       },
     }),
     updateTodolistTitle: build.mutation<BaseResponse, { id: string; title: string }>({
@@ -50,6 +48,19 @@ export const todolistsApi = baseApi.injectEndpoints({
           method: "DELETE",
           url: `/todo-lists/${id}`,
           body: { id },
+        }
+      },
+      async onQueryStarted(id: string, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          todolistsApi.util.updateQueryData("getTodolists", undefined, (state) => {
+            const index = state.findIndex((todo) => todo.id === id)
+            if (index !== 1) state.splice(index, 1)
+          }),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
         }
       },
       invalidatesTags: ["Todolists"],
