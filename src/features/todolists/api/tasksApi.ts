@@ -1,27 +1,7 @@
-import { instance } from "@/common/instance"
 import { CreateTaskArgs, DeleteTaskArgs, DomainTask, GetTasksResponse, UpdateTaskModel } from "./tasksApi.types"
 import { BaseResponse } from "@/common/types"
 import { baseApi } from "@/app/baseApi"
 import { PAGE_SIZE } from "@/common/constants"
-
-export const _tasksApi = {
-  getTasks(todolistId: string) {
-    return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
-  },
-  createTask(payload: CreateTaskArgs) {
-    const { todolistId, title } = payload
-    return instance.post<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks`, {
-      title,
-    })
-  },
-  updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
-    const { todolistId, taskId, model } = payload
-    return instance.put<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
-  },
-  deleteTask(payload: DeleteTaskArgs) {
-    return instance.delete<BaseResponse>(`/todo-lists/${payload.todolistId}/tasks/${payload.taskId}`)
-  },
-}
 
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

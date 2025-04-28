@@ -39,7 +39,11 @@ export const Tasks = ({ todolist }: Props) => {
               return <TaskItem key={task.id} task={task} todolistId={id} />
             })}
           </List>
-          <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+          {data && data.totalCount > 4 ? (
+            <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+          ) : (
+            <></>
+          )}
         </>
       )}
     </>
