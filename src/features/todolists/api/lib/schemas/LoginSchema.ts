@@ -9,7 +9,7 @@ export const loginSchema = z.object({
       message: "Must be 8+ chars, incl. uppercase & number.",
     }),
   rememberMe: z.boolean().optional(),
-  captcha: z.string().optional(),
+  captcha: z.union([z.string().min(1, "Captcha is required"), z.undefined()]).optional(),
 })
 
 export type Inputs = z.infer<typeof loginSchema>
