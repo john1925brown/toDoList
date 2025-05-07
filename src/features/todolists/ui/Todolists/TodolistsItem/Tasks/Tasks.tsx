@@ -1,10 +1,11 @@
 import { List } from "@mui/material"
-import { useAppSelector } from "@/common/hooks"
 import { TaskItem } from "./TaskItem/Task"
 import { TaskStatus } from "@/common/enums/enums"
-import { DomainTodolist } from "@/features/todolists/model/todolists-slice"
 import { useGetTasksQuery } from "@/features/todolists/api/tasksApi"
 import { TasksSkeleton } from "./TasksSkeleton/TasksSkeleton"
+import { DomainTodolist } from "../../lib/types"
+import { useState } from "react"
+import { TasksPagination } from "./TasksPagination/TasksPagination"
 
 type Props = {
   todolist: DomainTodolist
@@ -12,8 +13,8 @@ type Props = {
 
 export const Tasks = ({ todolist }: Props) => {
   const { id, filter } = todolist
-  const entityStatus = useAppSelector((state) => state.app.status)
-  const { data, isLoading } = useGetTasksQuery(id)
+  const [page, setPage] = useState(1)
+  const { data, isLoading } = useGetTasksQuery({ todolistId: id, params: { page } }, { refetchOnFocus: true })
 
   if (isLoading) {
     return <TasksSkeleton />
@@ -32,12 +33,18 @@ export const Tasks = ({ todolist }: Props) => {
       {filteredTasks && filteredTasks.length === 0 ? (
         <p>There are no tasks</p>
       ) : (
-        <List>
-          {filteredTasks &&
-            filteredTasks.map((task) => {
-              return <TaskItem key={task.id} task={task} todolistId={id} disabled={entityStatus === "loading"} />
+        <>
+          <List>
+            {filteredTasks?.map((task) => {
+              return <TaskItem key={task.id} task={task} todolistId={id} />
             })}
-        </List>
+          </List>
+          {data && data.totalCount > 4 ? (
+            <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </>
   )

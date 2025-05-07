@@ -1,20 +1,7 @@
-import { instance } from "@/common/instance"
 import { BaseResponse } from "@/common/types"
 import { Inputs } from "@/features/todolists/api/lib/schemas/LoginSchema"
 import { LoginResponce, MeResponce } from "./authApi.types"
 import { baseApi } from "@/app/baseApi"
-
-export const _authApi = {
-  login(payload: Inputs) {
-    return instance.post<BaseResponse<LoginResponce>>(`/auth/login`, payload)
-  },
-  logout() {
-    return instance.delete<BaseResponse>(`/auth/login`)
-  },
-  me() {
-    return instance.get<BaseResponse<MeResponce>>(`auth/me`)
-  },
-}
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -34,7 +21,10 @@ export const authApi = baseApi.injectEndpoints({
         url: `/auth/login`,
       }),
     }),
+    getCaptcha: build.query<{ url: string }, void>({
+      query: () => "security/get-captcha-url",
+    }),
   }),
 })
 
-export const { useMeQuery, useLoginMutation, useLogoutMutation } = authApi
+export const { useMeQuery, useLoginMutation, useLogoutMutation, useLazyGetCaptchaQuery } = authApi

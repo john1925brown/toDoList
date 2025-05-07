@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton"
 import { ListItem } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { TaskStatus } from "@/common/enums/enums"
-import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types"
+import { DomainTask } from "@/features/todolists/api/tasksApi.types"
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolists/api/tasksApi"
 import { createTaskModel } from "@/features/todolists/lib/utils/createTaskModel"
 
